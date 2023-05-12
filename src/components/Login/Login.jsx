@@ -2,21 +2,21 @@ import {useState} from 'react';
 import { useAuth } from '../../context/authContext';
 import { useNavigate } from 'react-router-dom';
 
-export function Login() {
+export default function Login() {
 
   const [user, setUser] = useState({
     email:'',
     password:'',
   });
 
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState();
 
   const handleChange = ({target: {name, value}}) => {
     setUser({...user, [name]: value})
   }
-
+  //agregar loaders
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -28,8 +28,19 @@ export function Login() {
       setError(error.message)
     }
   }
- 
+
+  const handleGoogleSignin = async () => {
+    try {
+      await loginWithGoogle()
+      navigate('/')
+    } catch (error) {
+      // poner sweet alert o toastyfi
+      setError(error.message)
+    }
+  } 
+
   return (
+  <>
     <form onSubmit={handleSubmit}>
 
       <label htmlFor="email">Email</label>
@@ -51,5 +62,9 @@ export function Login() {
       <button>Login</button>
 
     </form>
+
+      <button onClick={handleGoogleSignin}>Google Login</button>
+    
+  </>
   )
 }

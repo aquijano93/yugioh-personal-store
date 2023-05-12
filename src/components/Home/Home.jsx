@@ -1,13 +1,17 @@
-
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/authContext'
 
 export default function Home() {
   
   const {user, logout, loading} = useAuth()
   const navigate = useNavigate() 
-
-  const handleLogout = await () => {
-    await logout()
+  //agregar loaders
+  const handleLogout = async () => {
+    try {
+      await logout()
+    } catch (error) {
+      console.log(error)
+    }
   }
   
   if (loading === true){
